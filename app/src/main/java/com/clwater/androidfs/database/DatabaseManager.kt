@@ -4,15 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import com.clwater.androidfs.database.dao.YaoDao
-import com.clwater.androidfs.database.entity.Yao
+import com.clwater.androidfs.database.dao.GuaDao
+import com.clwater.androidfs.database.entity.GuaEntity
 
 @Database(
-    entities = [Yao::class],
+    entities = [GuaEntity::class],
     version = 1,
 )
 abstract class DatabaseManager : RoomDatabase() {
-    abstract fun yaoDao(): YaoDao
+    abstract fun guaDao(): GuaDao
 
     companion object {
         private var INSTANCE: DatabaseManager? = null
@@ -34,12 +34,12 @@ abstract class DatabaseManager : RoomDatabase() {
         }
     }
 
-    fun getYaoList(): List<Yao> {
-        return yaoDao().getAll()
+    fun getGuaList(): List<GuaEntity> {
+        return guaDao().getAll()
     }
 
-    fun insertYao(vararg yao: Yao) {
-        yaoDao().insertAll(*yao)
+    fun insertGua(vararg guaEntity: GuaEntity) {
+        guaDao().insertAll(*guaEntity)
     }
 
 
