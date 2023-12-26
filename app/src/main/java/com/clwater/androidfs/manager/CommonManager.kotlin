@@ -1,0 +1,11 @@
+package com.clwater.androidfs.manager;
+
+class SingletonDemo private constructor() {
+    companion object {
+        val instance = SingletonHolder.holder
+    }
+
+    private object SingletonHolder {
+        val holder = SingletonDemo()
+    }
+}

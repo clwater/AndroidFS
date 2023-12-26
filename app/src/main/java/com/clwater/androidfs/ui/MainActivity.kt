@@ -1,4 +1,4 @@
-package com.clwater.androidfs
+package com.clwater.androidfs.ui
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
