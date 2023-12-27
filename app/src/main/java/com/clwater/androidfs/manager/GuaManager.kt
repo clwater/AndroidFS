@@ -3,6 +3,7 @@ package com.clwater.androidfs.manager;
 import android.util.Log
 import com.clwater.androidfs.database.DatabaseManager
 import com.clwater.androidfs.model.GuaModel
+import com.clwater.androidfs.model.Yao
 
 class GuaManager private constructor() {
     companion object {
@@ -44,6 +45,19 @@ class GuaManager private constructor() {
 //        guaImage = guaImage.replace("]", "")
 //        guaImage = guaImage.replace(" ", "")
 
+        val yaoEntities = DatabaseManager.getInstance().getYaoByGuaId(id)
+        val yaoList = mutableListOf<Yao>()
+        yaoEntities.forEach{
+            val yao = Yao(
+                index = it.index,
+                image = it.image,
+                base = it.base,
+                explain = listOf(),
+                philosophy = it.philosophy
+            )
+            yaoList.add(yao)
+        }
+
         gua = GuaModel(
             id = guaEntity.id,
             name = guaEntity.name,
@@ -53,9 +67,8 @@ class GuaManager private constructor() {
             image = guaEntity.image.split(",").map { it.toInt() },
 //            image = listOf(),
             explains = listOf(),
-            yao = listOf()
+            yao = yaoList.toList()
         )
-
         return gua
     }
 }

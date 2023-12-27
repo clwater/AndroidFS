@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -23,6 +24,8 @@ import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.NavigationBar
+import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.ViewModel
 import com.clwater.androidfs.manager.GuaManager
+import com.clwater.androidfs.model.GuaModel
+import com.clwater.androidfs.model.Yao
 import com.clwater.androidfs.ui.theme.AndroidFSTheme
 
 class MainActivity : ComponentActivity() {
@@ -64,8 +69,16 @@ class MainActivity : ComponentActivity() {
         val mSubTitle = mutableStateOf("")
         val mCurrentName = mutableStateOf("")
 
+        val mYaoIndex = mutableStateOf(1)
+        val mYaoBase = mutableStateOf("")
+        val mYaoList = mutableStateListOf<Pair<Int, String>>()
+
+
+        val yaoModels = mutableStateListOf<Yao>()
+
         fun changeIndex() {
             var image = ""
+            yaoModels.clear()
             mYaoImages.forEach {
                 image += it.toString()
             }
@@ -74,6 +87,15 @@ class MainActivity : ComponentActivity() {
             mCurrentTitle.value = "" + guaModel.id + "." + guaModel.desc_group
             mSubTitle.value = guaModel.desc_detail
             mCurrentName.value = guaModel.name
+
+            guaModel.yao.forEach {
+                yaoModels.add(it)
+                mYaoList.add(Pair(it.index, it.base))
+            }
+
+            mYaoBase.value = yaoModels[mYaoIndex.value].base
+
+
         }
     }
 
@@ -223,6 +245,9 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun FSYao(pageChange: FSPagerChange) {
+        var yaoIndex by remember {
+            mutableStateOf(0)
+        }
         Box(modifier = Modifier
             .fillMaxSize()
             .background(color = BackgroundColorYao)) {
@@ -246,8 +271,18 @@ class MainActivity : ComponentActivity() {
                         .weight(1f)
                         .fillMaxWidth()
                 ) {
+                    Row(
+                        modifier = Modifier.fillMaxSize()
+                    ) {
+                        Column {
+                            viewModel.mYaoList.forEach{
+                                Text(text = it.second)
+                            }
+                        }
 
-                    Text(text = "六爻")
+                        Text(text = viewModel.mYaoBase.value)
+                    }
+
                 }
                 Row(
                     modifier = Modifier

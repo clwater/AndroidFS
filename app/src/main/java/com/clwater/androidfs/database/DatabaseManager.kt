@@ -67,6 +67,10 @@ abstract class DatabaseManager : RoomDatabase() {
         yaoDao().insertAll(*yaoEntity)
     }
 
+    fun getYaoByGuaId(guaId: Int): List<YaoEntity> {
+        return yaoDao().getByGuaId(guaId)
+    }
+
     fun insertExplain(vararg explainEntity: ExplainEntity) {
         explainDao().insertAll(*explainEntity)
     }
