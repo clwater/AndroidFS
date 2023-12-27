@@ -18,8 +18,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
-import androidx.compose.foundation.text.BasicTextField
-import androidx.compose.material3.Button
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.ArrowForward
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,9 +34,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.focus.onFocusChanged
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -48,6 +48,13 @@ class MainActivity : ComponentActivity() {
         val TitleColor = Color(0xFF105150)
         val BackgroundColor = Color(0xFF468E8D)
         val NameColor = Color(0xFF66a09f)
+        val ArrowColor = Color(0x80FFFFFF)
+
+        val BackgroundColorYao = Color(0xFF4D468E)
+        val NameColorYao = Color(0xFF5E598D)
+        val TitleColorYao = Color(0xFF231C66)
+
+        val BackgroundColorExplain = Color(0xFF468E8D)
     }
     class MainViewModel: ViewModel() {
         val mCurrentIndex = mutableStateOf(1)
@@ -89,7 +96,7 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    fun FSMain(){
+    fun FSMain(pageChange: FSPagerChange) {
         Box(modifier = Modifier
             .fillMaxSize()
             .background(color = BackgroundColor)) {
@@ -105,71 +112,162 @@ class MainActivity : ComponentActivity() {
                     maxLines = 1,
                 )
             }
-            Column(
-                modifier = Modifier.fillMaxSize()
-            ) {
 
+            Column(            
+                modifier = Modifier.fillMaxSize()) {
                 Column(
-                    modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
                 ) {
-                    for (i in 0..5) {
 
-                        Row(modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(
-                                top = YaoHeight / 2,
-                                bottom = if (i == 2) YaoHeight else YaoHeight / 2
-                            )
-                            .clickable {
-                                viewModel.mYaoImages[i] = if (viewModel.mYaoImages[i] == 0) 1 else 0
-                                viewModel.changeIndex()
-                            }) {
-                            Box(modifier = Modifier
-                                .height(YaoHeight)
-                                .weight(1f)
-                                .background(color = Color.White)
-                            )
+                    Column(
+                        modifier = Modifier.padding(start = 16.dp, end = 16.dp)
+                    ) {
+                        for (i in 0..5) {
+
+                            Row(modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(
+                                    top = YaoHeight / 2,
+                                    bottom = if (i == 2) YaoHeight else YaoHeight / 2
+                                )
+                                .clickable {
+                                    viewModel.mYaoImages[i] =
+                                        if (viewModel.mYaoImages[i] == 0) 1 else 0
+                                    viewModel.changeIndex()
+                                }) {
+                                Box(modifier = Modifier
+                                    .height(YaoHeight)
+                                    .weight(1f)
+                                    .background(color = Color.White)
+                                )
 
 
-                            Box(modifier = Modifier
-                                .height(YaoHeight)
-                                .width(YaoHeight)
-                                .background(color = if (viewModel.mYaoImages[i] == 1) Color.White else Color.Transparent)
-                            )
+                                Box(modifier = Modifier
+                                    .height(YaoHeight)
+                                    .width(YaoHeight)
+                                    .background(color = if (viewModel.mYaoImages[i] == 1) Color.White else Color.Transparent)
+                                )
 
-                            Box(modifier = Modifier
-                                .height(YaoHeight)
-                                .weight(1f)
-                                .background(color = Color.White)
-                            )
+                                Box(modifier = Modifier
+                                    .height(YaoHeight)
+                                    .weight(1f)
+                                    .background(color = Color.White)
+                                )
+                            }
+
                         }
 
                     }
 
+                    Column(
+                        modifier = Modifier.weight(1f),
+                        verticalArrangement = Arrangement.Bottom
+                    ) {
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, top = 16.dp, end = 16.dp),
+                            color = TitleColor,
+                            fontSize = 48.sp,
+                            fontWeight = FontWeight.Bold,
+                            text = viewModel.mCurrentTitle.value
+                        )
+                        Text(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
+                            color = TitleColor,
+                            fontSize = 24.sp,
+                            fontWeight = FontWeight.Bold,
+                            text = viewModel.mSubTitle.value
+                        )
+                    }
                 }
-
-                Column(
-                    modifier = Modifier.weight(1f),
-                    verticalArrangement = Arrangement.Bottom
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween
                 ) {
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, top = 16.dp, end = 16.dp),
-                        color = TitleColor,
-                        fontSize = 48.sp,
-                        fontWeight = FontWeight.Bold,
-                        text = viewModel.mCurrentTitle.value
-                    )
-                    Text(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 16.dp, end = 16.dp, bottom = 16.dp),
-                        color = TitleColor,
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        text = viewModel.mSubTitle.value
-                    )
+                    Row(Modifier.clickable { pageChange.change(0) }) {
+                        Icon(
+                            imageVector = Icons.Default.ArrowBack,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(24.dp),
+                            tint = ArrowColor
+                        )
+
+                        Text(text = "六爻", modifier = Modifier, fontSize = 16.sp, color = ArrowColor)
+                    }
+
+                    Row(Modifier.clickable { pageChange.change(2) }) {
+                        Text(text = "释意", modifier = Modifier, fontSize = 16.sp, color = ArrowColor)
+                        Icon(
+                            imageVector = Icons.Default.ArrowForward,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(24.dp),
+                            tint = ArrowColor
+                        )
+
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    fun FSYao(pageChange: FSPagerChange) {
+        Box(modifier = Modifier
+            .fillMaxSize()
+            .background(color = BackgroundColorYao)) {
+            Box(modifier = Modifier
+                .fillMaxSize(),
+                contentAlignment = Alignment.CenterEnd
+            ){
+                Text(text = viewModel.mCurrentName.value,
+                    modifier = Modifier,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = if (viewModel.mCurrentName.value.length > 1) 200.sp else 300.sp,
+                    color = NameColorYao,
+                    maxLines = 1,
+                )
+            }
+
+            Column(
+                modifier = Modifier.fillMaxSize()) {
+                Column(
+                    modifier = Modifier
+                        .weight(1f)
+                        .fillMaxWidth()
+                ) {
+
+                    Text(text = "六爻")
+                }
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(start = 16.dp, end = 16.dp, bottom = 8.dp),
+                    horizontalArrangement = Arrangement.End
+                ) {
+
+                    Row(Modifier.clickable { pageChange.change(1) }) {
+                        Text(text = "释意", modifier = Modifier, fontSize = 16.sp, color = ArrowColor)
+                        Icon(
+                            imageVector = Icons.Default.ArrowForward,
+                            contentDescription = null,
+                            modifier = Modifier
+                                .height(24.dp)
+                                .width(24.dp),
+                            tint = ArrowColor
+                        )
+
+                    }
                 }
             }
         }
@@ -186,23 +284,24 @@ class MainActivity : ComponentActivity() {
             initialPage = 1,
             )
 
+        LaunchedEffect(pagerState.currentPage){
+            currentIndex = pagerState.currentPage
+        }
         LaunchedEffect(currentIndex){
             pagerState.animateScrollToPage(currentIndex)
         }
 
-        HorizontalPager(state = pagerState,
-            onFocusChanged {
-                Log
+        val fsPagerChange = object : FSPagerChange{
+            override fun change(index: Int) {
+                currentIndex = index
             }
+        }
+
+        HorizontalPager(state = pagerState,
             ) { page ->
             when(page){
-                0 ->
-                    Button(onClick = {
-                        currentIndex = 1
-                    }) {
-                        Text(text = "cl")
-                    }
-                1 -> FSMain()
+                0 -> FSYao(fsPagerChange)
+                1 -> FSMain(fsPagerChange)
                 2 ->             Text(
                     text = "Page: $page",
                     modifier = Modifier.fillMaxWidth()
@@ -211,7 +310,10 @@ class MainActivity : ComponentActivity() {
 
         }
 
+    }
 
+    interface FSPagerChange{
+        fun change(index: Int)
     }
 }
 
