@@ -58,6 +58,11 @@ abstract class DatabaseManager : RoomDatabase() {
         guaDao().insertAll(*guaEntity)
     }
 
+    fun  getGuaById(id: Int): GuaEntity {
+        return guaDao().getById(id)
+    }
+
+
     fun insertYao(vararg yaoEntity: YaoEntity) {
         yaoDao().insertAll(*yaoEntity)
     }

@@ -10,6 +10,9 @@ interface GuaDao {
     @Query("SELECT * FROM GuaEntity")
     fun getAll(): List<GuaEntity>
 
+    @Query("SELECT * FROM GuaEntity WHERE id = :id")
+    fun getById(id: Int): GuaEntity
+
     @Insert
     fun insertAll(vararg guaEntity: GuaEntity)
 

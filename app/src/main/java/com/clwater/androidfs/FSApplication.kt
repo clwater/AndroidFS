@@ -3,6 +3,7 @@ package com.clwater.androidfs
 import android.app.Application
 import com.clwater.androidfs.database.DatabaseManager
 import com.clwater.androidfs.database.entity.GuaEntity
+import com.clwater.androidfs.manager.GuaManager
 import com.clwater.androidfs.utils.BaseDataBaseImportUtils
 
 class FSApplication : Application(){
@@ -13,5 +14,7 @@ class FSApplication : Application(){
             DatabaseManager.getInstance().deleteAll()
             BaseDataBaseImportUtils.INSRANCE.importBaseData(this)
         }
+
+        GuaManager.instance.initQuickYao()
     }
 }

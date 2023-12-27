@@ -31,12 +31,13 @@ class BaseDataBaseImportUtils {
             val explainTables = mutableListOf<ExplainEntity>()
             val explainItemTables = mutableListOf<ExplainItemEntity>()
             guaModels.forEach { guaModel ->
+                val images = guaModel.image.toString().replace("[", "").replace("]", "").replace(" ", "")
                 val guaEntity = GuaEntity(
                     guaModels.indexOf(guaModel) + 1,
                     guaModel.name,
                     guaModel.desc_group,
                     guaModel.desc,
-                    guaModel.image.toString(),
+                    images,
                     guaModel.desc_detail
                 )
                 guaTables.add(guaEntity)
