@@ -8,7 +8,7 @@ import androidx.room.PrimaryKey
 data class ExplainItemEntity(
     @PrimaryKey val id: Int,
     val gua_id: Int,
-    val explainId: Int,
+    val explain_Id: Int,
     val index: Int,
     val explain: String
 )

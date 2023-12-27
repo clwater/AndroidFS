@@ -2,11 +2,11 @@
   "formatVersion": 1,
   "database": {
     "version": 1,
-    "identityHash": "a47be9f1def72f5cb1002c3636ff9ca4",
+    "identityHash": "dad1353516ac97da88564b54049fb237",
     "entities": [
       {
         "tableName": "GuaEntity",
-        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `desc_group` TEXT NOT NULL, `desc` TEXT NOT NULL, `image` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `name` TEXT NOT NULL, `desc_group` TEXT NOT NULL, `desc` TEXT NOT NULL, `image` TEXT NOT NULL, `detail` TEXT NOT NULL, PRIMARY KEY(`id`))",
         "fields": [
           {
             "fieldPath": "id",
@@ -37,6 +37,186 @@
             "columnName": "image",
             "affinity": "TEXT",
             "notNull": true
+          },
+          {
+            "fieldPath": "detail",
+            "columnName": "detail",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "YaoEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `gua_id` INTEGER NOT NULL, `index` INTEGER NOT NULL, `image` TEXT NOT NULL, `base` TEXT NOT NULL, `explain_0_origin` TEXT NOT NULL, `explain_0_explain` TEXT NOT NULL, `explain_1_origin` TEXT NOT NULL, `explain_1_explain` TEXT NOT NULL, `explain_2_origin` TEXT NOT NULL, `explain_2_explain` TEXT NOT NULL, `philosophy` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gua_id",
+            "columnName": "gua_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "image",
+            "columnName": "image",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "base",
+            "columnName": "base",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "explain_0_origin",
+            "columnName": "explain_0_origin",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "explain_0_explain",
+            "columnName": "explain_0_explain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "explain_1_origin",
+            "columnName": "explain_1_origin",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "explain_1_explain",
+            "columnName": "explain_1_explain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "explain_2_origin",
+            "columnName": "explain_2_origin",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "explain_2_explain",
+            "columnName": "explain_2_explain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "philosophy",
+            "columnName": "philosophy",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ExplainEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `gua_id` INTEGER NOT NULL, `explainType` INTEGER NOT NULL, `mainExplain` TEXT NOT NULL, `base` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gua_id",
+            "columnName": "gua_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "explainType",
+            "columnName": "explainType",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "mainExplain",
+            "columnName": "mainExplain",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "base",
+            "columnName": "base",
+            "affinity": "TEXT",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "ExplainItemEntity",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER NOT NULL, `gua_id` INTEGER NOT NULL, `explain_Id` INTEGER NOT NULL, `index` INTEGER NOT NULL, `explain` TEXT NOT NULL, PRIMARY KEY(`id`))",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "gua_id",
+            "columnName": "gua_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "explain_Id",
+            "columnName": "explain_Id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "index",
+            "columnName": "index",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "explain",
+            "columnName": "explain",
+            "affinity": "TEXT",
+            "notNull": true
           }
         ],
         "primaryKey": {
@@ -52,7 +232,7 @@
     "views": [],
     "setupQueries": [
       "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
-      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'a47be9f1def72f5cb1002c3636ff9ca4')"
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, 'dad1353516ac97da88564b54049fb237')"
     ]
   }
 }

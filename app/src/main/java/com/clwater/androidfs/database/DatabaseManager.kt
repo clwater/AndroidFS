@@ -4,15 +4,24 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.clwater.androidfs.database.dao.ExplainDao
+import com.clwater.androidfs.database.dao.ExplainItemDao
 import com.clwater.androidfs.database.dao.GuaDao
+import com.clwater.androidfs.database.dao.YaoDao
+import com.clwater.androidfs.database.entity.ExplainEntity
+import com.clwater.androidfs.database.entity.ExplainItemEntity
 import com.clwater.androidfs.database.entity.GuaEntity
+import com.clwater.androidfs.database.entity.YaoEntity
 
 @Database(
-    entities = [GuaEntity::class],
+    entities = [GuaEntity::class, YaoEntity::class, ExplainEntity::class, ExplainItemEntity::class],
     version = 1,
 )
 abstract class DatabaseManager : RoomDatabase() {
     abstract fun guaDao(): GuaDao
+    abstract fun yaoDao(): YaoDao
+    abstract fun explainDao(): ExplainDao
+    abstract fun explainItemDao(): ExplainItemDao
 
     companion object {
         private var INSTANCE: DatabaseManager? = null
@@ -34,12 +43,31 @@ abstract class DatabaseManager : RoomDatabase() {
         }
     }
 
+    fun deleteAll(){
+        guaDao().deleteAll()
+        yaoDao().deleteAll()
+        explainDao().deleteAll()
+        explainItemDao().deleteAll()
+    }
+
     fun getGuaList(): List<GuaEntity> {
         return guaDao().getAll()
     }
 
     fun insertGua(vararg guaEntity: GuaEntity) {
         guaDao().insertAll(*guaEntity)
+    }
+
+    fun insertYao(vararg yaoEntity: YaoEntity) {
+        yaoDao().insertAll(*yaoEntity)
+    }
+
+    fun insertExplain(vararg explainEntity: ExplainEntity) {
+        explainDao().insertAll(*explainEntity)
+    }
+
+    fun insertExplainItem(vararg explainItemEntity: ExplainItemEntity) {
+        explainItemDao().insertAll(*explainItemEntity)
     }
 
 

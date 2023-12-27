@@ -9,8 +9,9 @@ class FSApplication : Application(){
     override fun onCreate() {
         super.onCreate()
         DatabaseManager.init(this)
-//        val guaEntity: GuaEntity = GuaEntity(1, "yao")
-//        DatabaseManager.getInstance().insertGua(guaEntity)
-        BaseDataBaseImportUtils.INSRANCE.importBaseData(this)
+        if (DatabaseManager.getInstance().getGuaList().isEmpty()){
+            DatabaseManager.getInstance().deleteAll()
+            BaseDataBaseImportUtils.INSRANCE.importBaseData(this)
+        }
     }
 }
