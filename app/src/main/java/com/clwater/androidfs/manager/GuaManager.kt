@@ -4,6 +4,7 @@ import android.util.Log
 import com.clwater.androidfs.database.DatabaseManager
 import com.clwater.androidfs.model.GuaModel
 import com.clwater.androidfs.model.Yao
+import com.clwater.androidfs.model.YaoItem
 
 class GuaManager private constructor() {
     companion object {
@@ -47,12 +48,26 @@ class GuaManager private constructor() {
 
         val yaoEntities = DatabaseManager.getInstance().getYaoByGuaId(id)
         val yaoList = mutableListOf<Yao>()
+
+
+
+
         yaoEntities.forEach{
+            val yaoExplainList = mutableListOf<YaoItem>()
+            yaoExplainList.add(YaoItem(
+                origin = it.explain_0_origin,
+                explain = it.explain_0_explain
+            ))
+            yaoExplainList.add(YaoItem(
+                origin = it.explain_1_origin,
+                explain = it.explain_1_explain
+            ))
+
             val yao = Yao(
                 index = it.index,
                 image = it.image,
                 base = it.base,
-                explain = listOf(),
+                explain = yaoExplainList,
                 philosophy = it.philosophy
             )
             yaoList.add(yao)

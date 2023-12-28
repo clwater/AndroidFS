@@ -19,6 +19,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.pager.HorizontalPager
 import androidx.compose.foundation.pager.rememberPagerState
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.ArrowForward
@@ -71,10 +73,11 @@ class MainActivity : ComponentActivity() {
         val mSubTitle = mutableStateOf("")
         val mCurrentName = mutableStateOf("")
 
-        val mYaoIndex = mutableStateOf(1)
-        val mYaoBase = mutableStateOf("")
+        val mYaoIndex = mutableStateOf(0)
         val mYaoList = mutableStateListOf<Pair<Int, Int>>()
-
+        val mYaoBase = mutableStateOf("")
+        val mYaoExplains = mutableStateListOf<Pair<String, String>>()
+        val mYaoPhilosophy = mutableStateOf("")
 
         private val yaoModels = mutableStateListOf<Yao>()
 
@@ -95,13 +98,21 @@ class MainActivity : ComponentActivity() {
 
             guaModel.yao.forEach {
                 yaoModels.add(it)
-
                 mYaoList.add(Pair(it.index, it.image.toInt()))
             }
 
-            mYaoBase.value = yaoModels[mYaoIndex.value].base
+            changeYaoIndex(1)
+//            mYaoBase.value = yaoModels[mYaoIndex.value].base
+        }
 
-
+        fun changeYaoIndex(index: Int) {
+            mYaoIndex.value = index
+            val yao = yaoModels[mYaoIndex.value - 1]
+            mYaoBase.value = yao.base
+            mYaoExplains.clear()
+            mYaoExplains.add(Pair(yao.explain[0].origin, yao.explain[0].explain))
+            mYaoExplains.add(Pair(yao.explain[1].origin, yao.explain[1].explain))
+            mYaoPhilosophy.value = yao.philosophy
         }
     }
 
@@ -304,7 +315,7 @@ class MainActivity : ComponentActivity() {
                                     .weight(1f)
                                     .align(Alignment.CenterHorizontally)
                                     .clickable {
-                                        viewModel.mYaoIndex.value = yao.first
+                                        viewModel.changeYaoIndex(yao.first)
                                     }
                                     .background(color = if (viewModel.mYaoIndex.value == yao.first) Color.Transparent else BackgroundColorUnChooseYao),
                                     verticalArrangement = Arrangement.Center,
@@ -356,12 +367,37 @@ class MainActivity : ComponentActivity() {
 
                             }
                         }
-                        Row(
+                        Column(
                             modifier = Modifier.weight(4f)
+                                .padding(8.dp)
+                                .verticalScroll(rememberScrollState())
                         ) {
+                            
                             Text(
                                 color = TitleColorYao,
+                                fontSize = 20.sp,
+                                fontWeight = FontWeight.Bold,
                                 text = viewModel.mYaoBase.value)
+                            viewModel.mYaoExplains.forEach{
+                                Column(
+                                    modifier = Modifier.padding(vertical = 4.dp)
+                                ) {
+                                    Text(
+                                        color = Color.White,
+                                        text = "【" + it.first + "】")
+                                    Text(
+                                        fontSize = 18.sp,
+                                        color = TitleColorYao,
+                                        text = it.second)
+                                }
+                            }
+                            Text(
+                                color = Color.White,
+                                text = "【解读】")
+                            Text(
+                                fontSize = 18.sp,
+                                color = TitleColorYao,
+                                text = viewModel.mYaoPhilosophy.value)
                         }
                     }
 
