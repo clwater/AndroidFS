@@ -11,6 +11,9 @@ interface ExplainDao {
     @Query("SELECT * FROM ExplainEntity")
     fun getAll(): List<ExplainEntity>
 
+    @Query("SELECT * FROM ExplainEntity WHERE gua_id = :guaId")
+    fun getByGuaId(guaId: Int): List<ExplainEntity>
+
     @Insert
     fun insertAll(vararg explainEntity: ExplainEntity)
 

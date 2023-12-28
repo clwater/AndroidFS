@@ -10,6 +10,9 @@ interface ExplainItemDao {
     @Query("SELECT * FROM ExplainItemEntity")
     fun getAll(): List<ExplainItemEntity>
 
+    @Query("SELECT * FROM ExplainItemEntity WHERE explain_id = :explainId")
+    fun getByExplainId(explainId: Int): List<ExplainItemEntity>
+
     @Insert
     fun insertAll(vararg explainItemEntity: ExplainItemEntity)
 

@@ -7,6 +7,7 @@ import com.clwater.androidfs.database.entity.ExplainEntity
 import com.clwater.androidfs.database.entity.ExplainItemEntity
 import com.clwater.androidfs.database.entity.GuaEntity
 import com.clwater.androidfs.database.entity.YaoEntity
+import com.clwater.androidfs.manager.GuaManager
 import com.clwater.androidfs.model.GuaModel
 import com.google.gson.Gson
 
@@ -75,7 +76,7 @@ class BaseDataBaseImportUtils {
                     if (!explain.items.isNullOrEmpty()) {
                         explain.items.forEach { explainItem ->
                             val explainItemEntity = ExplainItemEntity(
-                                id = explainEntity.id * 20 + explainItem.index,
+                                id = explainEntity.id * GuaManager.instance.explainMap.size + explainItem.index,
                                 gua_id = guaEntity.id,
                                 explain_Id = explainEntity.id,
                                 index = explainItem.index,

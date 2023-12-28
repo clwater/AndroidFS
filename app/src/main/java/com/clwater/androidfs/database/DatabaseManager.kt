@@ -75,8 +75,16 @@ abstract class DatabaseManager : RoomDatabase() {
         explainDao().insertAll(*explainEntity)
     }
 
+    fun getExplainByGuaId(guaId: Int): List<ExplainEntity> {
+        return explainDao().getByGuaId(guaId)
+    }
+
     fun insertExplainItem(vararg explainItemEntity: ExplainItemEntity) {
         explainItemDao().insertAll(*explainItemEntity)
+    }
+
+    fun getExplainItemByExplainId(explainId: Int): List<ExplainItemEntity> {
+        return explainItemDao().getByExplainId(explainId)
     }
 
 
