@@ -48,22 +48,24 @@ import com.clwater.androidfs.model.Yao
 import com.clwater.androidfs.ui.theme.AndroidFSTheme
 
 class MainActivity : ComponentActivity() {
-    companion object{
+    companion object {
         val YaoHeight = 30.dp
         val TitleColor = Color(0xFF105150)
         val BackgroundColor = Color(0xFF468E8D)
         val NameColor = Color(0xFF66a09f)
         val ArrowColor = Color(0x80FFFFFF)
 
-        val BackgroundColorYao = Color(0xFF4D468E)
-        val NameColorYao = Color(0xFF5E598D)
+        val BackgroundColorYao = Color(0xFF827AC9)
+        val BackgroundColorUnChooseYao = Color(0xBF695DCF)
+        val NameColorYao = Color(0xFF9D94EE)
         val TitleColorYao = Color(0xFF231C66)
 
         val BackgroundColorExplain = Color(0xFF468E8D)
     }
-    class MainViewModel: ViewModel() {
+
+    class MainViewModel : ViewModel() {
         val mCurrentIndex = mutableStateOf(1)
-        val mYaoImages = mutableStateListOf(1,1,1,1,1,1)
+        val mYaoImages = mutableStateListOf(1, 1, 1, 1, 1, 1)
 
         val mCurrentTitle = mutableStateOf("")
         val mSubTitle = mutableStateOf("")
@@ -71,14 +73,17 @@ class MainActivity : ComponentActivity() {
 
         val mYaoIndex = mutableStateOf(1)
         val mYaoBase = mutableStateOf("")
-        val mYaoList = mutableStateListOf<Pair<Int, String>>()
+        val mYaoList = mutableStateListOf<Pair<Int, Int>>()
 
 
-        val yaoModels = mutableStateListOf<Yao>()
+        private val yaoModels = mutableStateListOf<Yao>()
+
 
         fun changeIndex() {
             var image = ""
             yaoModels.clear()
+
+            mYaoList.clear()
             mYaoImages.forEach {
                 image += it.toString()
             }
@@ -90,7 +95,8 @@ class MainActivity : ComponentActivity() {
 
             guaModel.yao.forEach {
                 yaoModels.add(it)
-                mYaoList.add(Pair(it.index, it.base))
+
+                mYaoList.add(Pair(it.index, it.image.toInt()))
             }
 
             mYaoBase.value = yaoModels[mYaoIndex.value].base
@@ -108,8 +114,7 @@ class MainActivity : ComponentActivity() {
             AndroidFSTheme {
                 // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background
                 ) {
                     FS()
                 }
@@ -119,14 +124,16 @@ class MainActivity : ComponentActivity() {
 
     @Composable
     fun FSMain(pageChange: FSPagerChange) {
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(color = BackgroundColor)) {
-            Box(modifier = Modifier
-                .fillMaxSize(),
-                contentAlignment = Alignment.CenterEnd
-            ){
-                Text(text = viewModel.mCurrentName.value,
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = BackgroundColor)
+        ) {
+            Box(
+                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterEnd
+            ) {
+                Text(
+                    text = viewModel.mCurrentName.value,
                     modifier = Modifier,
                     fontWeight = FontWeight.Bold,
                     fontSize = if (viewModel.mCurrentName.value.length > 1) 200.sp else 300.sp,
@@ -135,8 +142,9 @@ class MainActivity : ComponentActivity() {
                 )
             }
 
-            Column(            
-                modifier = Modifier.fillMaxSize()) {
+            Column(
+                modifier = Modifier.fillMaxSize()
+            ) {
                 Column(
                     modifier = Modifier
                         .weight(1f)
@@ -159,23 +167,26 @@ class MainActivity : ComponentActivity() {
                                         if (viewModel.mYaoImages[i] == 0) 1 else 0
                                     viewModel.changeIndex()
                                 }) {
-                                Box(modifier = Modifier
-                                    .height(YaoHeight)
-                                    .weight(1f)
-                                    .background(color = Color.White)
+                                Box(
+                                    modifier = Modifier
+                                        .height(YaoHeight)
+                                        .weight(1f)
+                                        .background(color = Color.White)
                                 )
 
 
-                                Box(modifier = Modifier
-                                    .height(YaoHeight)
-                                    .width(YaoHeight)
-                                    .background(color = if (viewModel.mYaoImages[i] == 1) Color.White else Color.Transparent)
+                                Box(
+                                    modifier = Modifier
+                                        .height(YaoHeight)
+                                        .width(YaoHeight)
+                                        .background(color = if (viewModel.mYaoImages[i] == 1) Color.White else Color.Transparent)
                                 )
 
-                                Box(modifier = Modifier
-                                    .height(YaoHeight)
-                                    .weight(1f)
-                                    .background(color = Color.White)
+                                Box(
+                                    modifier = Modifier
+                                        .height(YaoHeight)
+                                        .weight(1f)
+                                        .background(color = Color.White)
                                 )
                             }
 
@@ -184,8 +195,7 @@ class MainActivity : ComponentActivity() {
                     }
 
                     Column(
-                        modifier = Modifier.weight(1f),
-                        verticalArrangement = Arrangement.Bottom
+                        modifier = Modifier.weight(1f), verticalArrangement = Arrangement.Bottom
                     ) {
                         Text(
                             modifier = Modifier
@@ -223,11 +233,15 @@ class MainActivity : ComponentActivity() {
                             tint = ArrowColor
                         )
 
-                        Text(text = "六爻", modifier = Modifier, fontSize = 16.sp, color = ArrowColor)
+                        Text(
+                            text = "六爻", modifier = Modifier, fontSize = 16.sp, color = ArrowColor
+                        )
                     }
 
                     Row(Modifier.clickable { pageChange.change(2) }) {
-                        Text(text = "释意", modifier = Modifier, fontSize = 16.sp, color = ArrowColor)
+                        Text(
+                            text = "释意", modifier = Modifier, fontSize = 16.sp, color = ArrowColor
+                        )
                         Icon(
                             imageVector = Icons.Default.ArrowForward,
                             contentDescription = null,
@@ -243,19 +257,23 @@ class MainActivity : ComponentActivity() {
         }
     }
 
+
     @Composable
     fun FSYao(pageChange: FSPagerChange) {
         var yaoIndex by remember {
             mutableStateOf(0)
         }
-        Box(modifier = Modifier
-            .fillMaxSize()
-            .background(color = BackgroundColorYao)) {
-            Box(modifier = Modifier
-                .fillMaxSize(),
-                contentAlignment = Alignment.CenterEnd
-            ){
-                Text(text = viewModel.mCurrentName.value,
+        Box(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(color = BackgroundColorYao)
+        ) {
+            // 背景文字
+            Box(
+                modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.CenterEnd
+            ) {
+                Text(
+                    text = viewModel.mCurrentName.value,
                     modifier = Modifier,
                     fontWeight = FontWeight.Bold,
                     fontSize = if (viewModel.mCurrentName.value.length > 1) 200.sp else 300.sp,
@@ -265,25 +283,90 @@ class MainActivity : ComponentActivity() {
             }
 
             Column(
-                modifier = Modifier.fillMaxSize()) {
+                modifier = Modifier.fillMaxSize()
+            ) {
+                // 中心内容
                 Column(
                     modifier = Modifier
                         .weight(1f)
                         .fillMaxWidth()
                 ) {
                     Row(
-                        modifier = Modifier.fillMaxSize()
+                        modifier = Modifier.fillMaxSize(),
                     ) {
-                        Column {
-                            viewModel.mYaoList.forEach{
-                                Text(text = it.second)
+                        // 左侧菜单
+                        Column(
+                            modifier = Modifier.weight(1f)
+                        ) {
+                            for (i in viewModel.mYaoList.lastIndex downTo 0) {
+                                val yao = viewModel.mYaoList[i]
+                                Column(modifier = Modifier
+                                    .weight(1f)
+                                    .align(Alignment.CenterHorizontally)
+                                    .clickable {
+                                        viewModel.mYaoIndex.value = yao.first
+                                    }
+                                    .background(color = if (viewModel.mYaoIndex.value == yao.first) Color.Transparent else BackgroundColorUnChooseYao),
+                                    verticalArrangement = Arrangement.Center,
+                                    horizontalAlignment = Alignment.CenterHorizontally
+                                )
+                                {
+                                    Row(
+                                        modifier = Modifier
+                                            .padding(8.dp),
+                                    ) {
+                                        Box(
+                                            modifier = Modifier
+                                                .height(YaoHeight / 10)
+                                                .weight(1f)
+                                                .background(color = Color.White)
+                                        )
+
+                                        Box(
+                                            modifier = Modifier
+                                                .height(YaoHeight / 10)
+                                                .width(YaoHeight / 5)
+                                                .background(color = if (yao.second == 1) Color.White else Color.Transparent)
+                                        )
+
+                                        Box(
+                                            modifier = Modifier
+                                                .height(YaoHeight / 10)
+                                                .weight(1f)
+                                                .background(color = Color.White)
+                                        )
+                                    }
+                                    val yaoItemNameYao = if (yao.second == 1) "九" else "六"
+                                    val yaoItemName = when(i){
+                                        0 -> "初$yaoItemNameYao"
+                                        1 -> yaoItemNameYao + "二"
+                                        2 -> yaoItemNameYao + "三"
+                                        3 -> yaoItemNameYao + "四"
+                                        4 -> yaoItemNameYao + "五"
+                                        5 -> "上$yaoItemNameYao"
+                                        else -> ""
+                                    }
+                                    Text(modifier = Modifier,
+                                        color = TitleColorYao,
+                                        fontWeight = FontWeight.Bold,
+                                        fontSize = 16.sp,
+                                        text = "" + yaoItemName)
+
+                                }
+
                             }
                         }
-
-                        Text(text = viewModel.mYaoBase.value)
+                        Row(
+                            modifier = Modifier.weight(4f)
+                        ) {
+                            Text(
+                                color = TitleColorYao,
+                                text = viewModel.mYaoBase.value)
+                        }
                     }
 
                 }
+                // 底部提示
                 Row(
                     modifier = Modifier
                         .fillMaxWidth()
@@ -292,7 +375,9 @@ class MainActivity : ComponentActivity() {
                 ) {
 
                     Row(Modifier.clickable { pageChange.change(1) }) {
-                        Text(text = "释意", modifier = Modifier, fontSize = 16.sp, color = ArrowColor)
+                        Text(
+                            text = "卦", modifier = Modifier, fontSize = 16.sp, color = ArrowColor
+                        )
                         Icon(
                             imageVector = Icons.Default.ArrowForward,
                             contentDescription = null,
@@ -311,35 +396,35 @@ class MainActivity : ComponentActivity() {
     @OptIn(ExperimentalFoundationApi::class)
     @Composable
     fun FS() {
-        var currentIndex by remember{
+        var currentIndex by remember {
             mutableStateOf(0)
         }
         val pagerState = rememberPagerState(
-            pageCount = {3},
+            pageCount = { 3 },
             initialPage = 1,
-            )
+        )
 
-        LaunchedEffect(pagerState.currentPage){
+        LaunchedEffect(pagerState.currentPage) {
             currentIndex = pagerState.currentPage
         }
-        LaunchedEffect(currentIndex){
+        LaunchedEffect(currentIndex) {
             pagerState.animateScrollToPage(currentIndex)
         }
 
-        val fsPagerChange = object : FSPagerChange{
+        val fsPagerChange = object : FSPagerChange {
             override fun change(index: Int) {
                 currentIndex = index
             }
         }
 
-        HorizontalPager(state = pagerState,
-            ) { page ->
-            when(page){
+        HorizontalPager(
+            state = pagerState,
+        ) { page ->
+            when (page) {
                 0 -> FSYao(fsPagerChange)
                 1 -> FSMain(fsPagerChange)
-                2 ->             Text(
-                    text = "Page: $page",
-                    modifier = Modifier.fillMaxWidth()
+                2 -> Text(
+                    text = "Page: $page", modifier = Modifier.fillMaxWidth()
                 )
             }
 
@@ -347,7 +432,7 @@ class MainActivity : ComponentActivity() {
 
     }
 
-    interface FSPagerChange{
+    interface FSPagerChange {
         fun change(index: Int)
     }
 }
